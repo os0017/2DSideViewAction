@@ -29,6 +29,7 @@ public class PlayerManager : MonoBehaviour
     bool isDead = false;
     //登り判定
     bool isClimbing = false;
+    bool canClimb = false;
     public float climbSpeed = 3f;
     private void Start()
     {
@@ -79,7 +80,6 @@ public class PlayerManager : MonoBehaviour
                 if (isClimbing)
                 {
                     isClimbing = false;
-                    rigidbody2D.gravityScale = 1;
                 }
                 Jump();
             }
@@ -88,6 +88,13 @@ public class PlayerManager : MonoBehaviour
         {
             //空中にいる場合trueにしてジャンプアニメーションを表示する
             animator.SetBool("IsJumping", true);
+        }
+
+        // ↑キーでツタにつかまる
+        if (canClimb && Input.GetAxis("Vertical") > 0)
+        {
+            isClimbing = true;
+            PlayerClimb();
         }
 
         //ツタと重なっている場合、登りアクションを実行化可能にする
@@ -126,6 +133,8 @@ public class PlayerManager : MonoBehaviour
 
     void Jump()
     {
+
+        rigidbody2D.gravityScale = 2;
         audioSource.PlayOneShot(jumpSE);
         //上方向に力を加える
         rigidbody2D.AddForce(Vector2.up * Jumppower);
@@ -187,7 +196,7 @@ public class PlayerManager : MonoBehaviour
         }
         else if(collision.gameObject.tag == "Climb")
         {
-            PlayerClimb();
+            canClimb = true;            
         }
     }
 
@@ -195,8 +204,10 @@ public class PlayerManager : MonoBehaviour
     {
         if (collision.CompareTag("Climb"))
         {
+            canClimb = false;
             isClimbing = false;
-            rigidbody2D.gravityScale = 1;
+
+            rigidbody2D.gravityScale = 2;
             animator.SetBool("IsClimbing", false); 
         }
     }
