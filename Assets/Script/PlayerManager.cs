@@ -179,7 +179,7 @@ public class PlayerManager : MonoBehaviour
         }
         else if(collision.gameObject.tag == "Enemy")
         {
-            EnemyManager enemy = collision.gameObject.GetComponent<EnemyManager>();
+            EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
             //ã‚©‚ç“¥‚ñ‚¾ê‡Œ‚”j
             if(this.transform.position.y + 0.2f > enemy.transform.position.y)
             {

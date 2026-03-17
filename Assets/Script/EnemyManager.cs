@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : EnemyBase
 {
     [SerializeField]
     LayerMask blocklayerMask;
@@ -82,7 +82,7 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void DestroyEnemy()
+    public override void DestroyEnemy()
     {
         //Instantiate:プレハブを発生させる（プレハブ,発生する位置,発生する角度）
         Instantiate(deathEffect, this.transform.position, this.transform.rotation);

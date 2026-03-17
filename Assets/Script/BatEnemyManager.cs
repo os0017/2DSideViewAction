@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BatEnemyManager : MonoBehaviour
+public class BatEnemyManager : EnemyBase
 {
     Rigidbody2D rigidbody2D;
 
@@ -45,7 +45,7 @@ public class BatEnemyManager : MonoBehaviour
         rigidbody2D.velocity = new Vector2(x, y);
     }
 
-    public void DestroyEnemy()
+    public override void DestroyEnemy()
     {
         //Instantiate:プレハブを発生させる（プレハブ,発生する位置,発生する角度）
         Instantiate(deathEffect, this.transform.position, this.transform.rotation);
