@@ -34,6 +34,15 @@ public class BatEnemyManager : EnemyBase
     void ChasePlayer()
     {
         Vector2 dir = (player.position - transform.position).normalized;
+
+        //Œü‚«‚ðƒvƒŒƒCƒ„[‚ÖŒü‚¯‚é
+        if(dir.x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }else if(dir.x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
         rigidbody2D.velocity = dir * moveSpeed;
     }
 
@@ -41,6 +50,16 @@ public class BatEnemyManager : EnemyBase
     {
         float x = Mathf.Sin(Time.time) * moveSpeed;
         float y = Mathf.Cos(Time.time) * moveSpeed;
+
+        if(x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if(x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+
+        }
 
         rigidbody2D.velocity = new Vector2(x, y);
     }

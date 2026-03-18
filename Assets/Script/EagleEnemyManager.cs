@@ -18,6 +18,8 @@ public class EagleEnemyManager : EnemyBase
     bool isHurt = false;
     bool isInvincible = false;
     SpriteRenderer sr;
+    Vector2 attackDir;
+    bool isDashing = false;
 
     void Start()
     {
@@ -29,6 +31,7 @@ public class EagleEnemyManager : EnemyBase
     void Update()
     {
         if (isHurt) return;
+        if (isDashing) return;
 
         float distance = Vector2.Distance(transform.position, player.position);
 
@@ -46,15 +49,30 @@ public class EagleEnemyManager : EnemyBase
 
     void ChasePlayer()
     {
-        animator.SetBool("isAttack", true);
-        Vector2 dir = (player.position - transform.position).normalized;
-        rigidbody2D.velocity = dir * moveSpeed;
+        if (!isDashing)
+        {
+            attackDir = (player.position - transform.position).normalized;
+            isDashing = true;
+
+            animator.SetBool("isAttack", true);
+            StartCoroutine(DashCoroutine());
+        }
     }
 
     void Patrol()
     {
         float x = Mathf.Sin(Time.time) * moveSpeed;
         float y = Mathf.Cos(Time.time) * moveSpeed;
+
+        if (x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+
+        }
 
         rigidbody2D.velocity = new Vector2(x, y);
     }
@@ -95,5 +113,32 @@ public class EagleEnemyManager : EnemyBase
         isHurt = false;
         isInvincible = false;
 
+    }
+
+    IEnumerator DashCoroutine()
+    {
+        //“ËiŽžŠÔ
+        float dashtime = 1.0f;
+        float timer = 0;
+
+        while(timer < dashtime)
+        {
+            rigidbody2D.velocity = attackDir * moveSpeed * 3f;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        //I—¹
+        isDashing = false;
+        rigidbody2D.velocity = Vector2.zero;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (isDashing)
+        {
+            isDashing = false;
+            rigidbody2D.velocity = Vector2.zero;
+        }
     }
 }
